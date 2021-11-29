@@ -1,0 +1,24 @@
+type User @model {
+  id: ID!
+  username: String
+  about: String
+  posts: [Post] @connection(name: "UserPosts")
+  imageUrl: String
+}
+
+type Post @model {
+  id: ID!
+  username: String
+  imageUrl: String
+  caption: String
+  user: User @connection(name: "UserPosts")
+  likes: [String]
+  comments: [Comment] @connection(name: "PostComments")
+}
+
+type Comment @model {
+  id: ID!
+  content: String
+  username: String
+  post: Post! @connection(name: "PostComments")
+}
