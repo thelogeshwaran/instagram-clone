@@ -7,23 +7,22 @@ import BackupIcon from "@material-ui/icons/Backup";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 import { Typography } from "@material-ui/core";
 import { Storage } from "aws-amplify";
-import { createPost } from "../../graphql/mutations";
 import { API, graphqlOperation } from "aws-amplify";
-import { useDataProvider } from "../../Context/DataContext";
 import { CreatePostMutation } from "../../API";
 import { GraphQLResult } from "@aws-amplify/api";
+import { updateUser } from "../../graphql/mutations";
+import { useDataProvider } from "../../Context/DataContext";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ImageUploader: React.FC<IProps> = ({ setOpen }) => {
-  const [caption, setCaption] = useState("");
+function EditProfile({ setOpen }: IProps) {
+  const classes = useStyles();
   const [file, setFile] = useState<File | null>(null);
+  const [about, setAbout] = useState("");
   const [progress, setProgress] = useState(0);
   const { user } = useDataProvider();
-
-  const classes = useStyles();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files![0];
@@ -32,55 +31,51 @@ const ImageUploader: React.FC<IProps> = ({ setOpen }) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      if (file) {
-        const response = await await Storage.put(file.name, file, {
-          level: "public",
-          contentType: "image/png",
-          progressCallback(progress) {
-            setProgress((progress.loaded / progress.total) * 100);
-          },
-        });
+    if (file) {
+      const response = await await Storage.put(file.name, file, {
+        level: "public",
+        contentType: "image/png",
+        progressCallback(progress) {
+          setProgress((progress.loaded / progress.total) * 100);
+        },
+      });
 
-        createNewPost(response.key);
-      }
-    } catch (e) {
-      console.log(e);
+      updateProfile(response.key);
+      console.log(response.key);
     }
   };
-  async function createNewPost(url: string) {
+
+  const updateProfile = async (url: string) => {
     const data = {
-      username: user.username,
+      id: user.id,
       imageUrl: url,
-      caption: caption,
-      likes: [],
-      postUserId: user.id,
+      about: about,
     };
     try {
       (await API.graphql(
-        graphqlOperation(createPost, { input: data })
+        graphqlOperation(updateUser, { input: data })
       )) as GraphQLResult<CreatePostMutation>;
+
       setFile(null);
       setProgress(0);
       setOpen(false);
     } catch (e) {
       console.log(e);
     }
-  }
-
+  };
   return (
     <form className={classes.root} onSubmit={handleSubmit}>
       <Box className={classes.heading}>
-        <Typography variant="h5">Create New Post</Typography>
+        <Typography variant="h5">Edit Your Profile</Typography>
       </Box>
       <Box>
         <TextField
           className={classes.caption_input}
-          onChange={(e) => setCaption(e.target.value)}
-          label="Enter a caption"
+          onChange={(e) => setAbout(e.target.value)}
+          label="About"
           variant="outlined"
           autoFocus
-          value={caption}
+          value={about}
           required
         />
       </Box>
@@ -100,7 +95,7 @@ const ImageUploader: React.FC<IProps> = ({ setOpen }) => {
             variant="contained"
             component="span"
           >
-            Image
+            Profile Picture
           </Button>
         </label>
       </Box>
@@ -113,7 +108,7 @@ const ImageUploader: React.FC<IProps> = ({ setOpen }) => {
           variant="contained"
           color="primary"
         >
-          Post
+          Save
         </Button>
       </Box>
       <Box className={classes.progress}>
@@ -124,7 +119,7 @@ const ImageUploader: React.FC<IProps> = ({ setOpen }) => {
       </Box>
     </form>
   );
-};
+}
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -171,4 +166,4 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default ImageUploader;
+export default EditProfile;

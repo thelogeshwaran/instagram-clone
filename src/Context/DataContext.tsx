@@ -8,6 +8,7 @@ import {
   GetUserQuery,
   CreateUserMutation,
   User,
+  OnUpdateUserSubscription,
 } from "../API";
 import { GraphQLResult } from "@aws-amplify/api";
 import { listPosts } from "../grpaqhl";
@@ -32,9 +33,14 @@ interface CreatePostProps {
   value: GraphQLResult<OnCreatePostSubscription>;
 }
 
+interface UpdateuserProps {
+  value: GraphQLResult<OnUpdateUserSubscription>;
+}
+
 export const DataProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [posts, setPosts] = useState<(Post | null)[] | null>([]);
+  const [userProfile, setUserProfile] = useState<User | null>(null);
 
   useEffect(() => {
     fetchUser();
@@ -81,10 +87,20 @@ export const DataProvider: React.FC = ({ children }) => {
         ),
       error: (error: string) => console.warn(error),
     });
+    const subscriptionUpdateProfile = (
+      API.graphql(
+        graphqlOperation(subscriptions.onUpdateUser)
+      ) as Observable<object>
+    ).subscribe({
+      next: (response: UpdateuserProps) =>
+        setUserProfile(response.value?.data?.onUpdateUser!),
+      error: (error: string) => console.warn(error),
+    });
     return () => {
       subscriptionCreatePost.unsubscribe();
       subscriptionUpadatePost.unsubscribe();
       subscriptionCreateComment.unsubscribe();
+      subscriptionUpdateProfile.unsubscribe();
     };
   }, []);
 
@@ -160,6 +176,7 @@ export const DataProvider: React.FC = ({ children }) => {
   };
 
   const updatePostdata = (data: any, posts: Post[]) => {
+    console.log(data);
     const updatedPosts = posts.map((item: Post) => {
       if (item.id === data.id) {
         return data;
@@ -171,7 +188,9 @@ export const DataProvider: React.FC = ({ children }) => {
   };
 
   return (
-    <DataContext.Provider value={{ user, setUser, posts, setPosts }}>
+    <DataContext.Provider
+      value={{ user, setUser, posts, setPosts, userProfile, setUserProfile }}
+    >
       {children}
     </DataContext.Provider>
   );

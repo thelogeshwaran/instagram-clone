@@ -31,3 +31,8 @@
 .profile_about {
   margin: 10px;
 }
+
+.profile_userEdit {
+  display: flex;
+  align-items: center;
+}

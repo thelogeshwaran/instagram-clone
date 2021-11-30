@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
 import ImageItem from "../ImageItem/ImageItem";
 import "./ImageGrid.css";
-import { User, Post } from "../../API";
+import { Post } from "../../API";
+import { useDataProvider } from "../../Context/DataContext";
 
-interface Props {
-  user: User | null;
-}
-
-function ImageGrid({ user }: Props) {
-  const [posts, setPosts] = useState<any>([]);
+function ImageGrid() {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const { userProfile } = useDataProvider();
 
   useEffect(() => {
-    user?.posts && setPosts(user?.posts.items!);
-  }, [user]);
+    userProfile?.posts && setPosts(userProfile?.posts.items!);
+  }, [userProfile]);
 
   return (
     <div className="imageGrid">
