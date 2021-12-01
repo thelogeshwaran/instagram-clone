@@ -213,6 +213,7 @@ const useStyles = makeStyles(() => ({
   },
   avatar: {
     backgroundColor: red[300],
+    cursor: "pointer",
   },
   comment: {
     padding: 0,

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import ImageItem from "../ImageItem/ImageItem";
-import "./ImageGrid.css";
 import { Post } from "../../API";
 import { useDataProvider } from "../../Context/DataContext";
+import { makeStyles } from "@material-ui/core/styles";
 
 function ImageGrid() {
+  const classes = useStyles();
   const [posts, setPosts] = useState<(Post | null)[]>([]);
   const { userProfile } = useDataProvider();
 
@@ -13,7 +14,7 @@ function ImageGrid() {
   }, [userProfile]);
 
   return (
-    <div className="imageGrid">
+    <div className={classes.imageGrid}>
       {posts.map((item: Post | null) => {
         return <ImageItem key={item?.id} url={item?.imageUrl!} />;
       })}
@@ -22,3 +23,14 @@ function ImageGrid() {
 }
 
 export default ImageGrid;
+
+const useStyles = makeStyles(() => ({
+  imageGrid: {
+    maxWidth: "900",
+    borderTop: "1px solid lightgray",
+    magin: "0 auto",
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center",
+  },
+}));
