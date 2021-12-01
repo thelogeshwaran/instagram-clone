@@ -50,11 +50,11 @@ const ImageUploader: React.FC<IProps> = ({ setOpen }) => {
   };
   async function createNewPost(url: string) {
     const data = {
-      username: user.username,
+      username: user?.username,
       imageUrl: url,
       caption: caption,
       likes: [],
-      postUserId: user.id,
+      postUserId: user?.id,
     };
     try {
       (await API.graphql(

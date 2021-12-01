@@ -1,32 +1,20 @@
 import React, { useEffect } from "react";
 import ImageGrid from "../../Components/ImageGrid/ImageGrid";
 import ProfileHeader from "../../Components/ProfileHeader/ProfileHeader";
-import { getUser } from "../../graphql/queries";
-import { GetUserQuery } from "../../API";
-import { API, graphqlOperation } from "aws-amplify";
-import { GraphQLResult } from "@aws-amplify/api";
 import { useParams } from "react-router";
+import { useStore } from "../../Store/PostStore";
 import { useDataProvider } from "../../Context/DataContext";
 
 function ProfilePage() {
   const { id } = useParams();
-  const { setUserProfile } = useDataProvider();
+  const { fetchUserProfile } = useStore();
+  const { userProfile } = useDataProvider();
 
   useEffect(() => {
-    fetchUser(id!);
-  }, [id]);
-
-  async function fetchUser(userId: string) {
-    try {
-      const userdata = (await API.graphql(
-        graphqlOperation(getUser, { id: userId })
-      )) as GraphQLResult<GetUserQuery>;
-      const fetchedUser = userdata.data?.getUser;
-      setUserProfile(fetchedUser!);
-    } catch (err) {
-      console.log("error fetching user: ", err);
+    if (id !== userProfile?.id) {
+      fetchUserProfile(id!);
     }
-  }
+  }, [id]);
 
   return (
     <div>

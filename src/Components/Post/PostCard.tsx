@@ -27,31 +27,26 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { useNavigate } from "react-router-dom";
 
 interface Props {
-  post: Post;
+  post: Post | null;
 }
 
 const PostCard: React.FC<Props> = ({ post }) => {
   const classes = useStyles();
   const [url, setUrl] = useState<string | null>(null);
   const [liked, setLiked] = useState(false);
-  const [comments, setComments] = useState<(Comment | null)[] | null>([]);
   const [commentsOpen, setCommentsOpen] = useState(false);
   const { user } = useDataProvider();
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchUrl(post.imageUrl!);
-  }, [post.imageUrl]);
+    fetchUrl(post?.imageUrl!);
+  }, [post?.imageUrl]);
 
   useEffect(() => {
-    post.comments && post.comments.items && setComments(post.comments.items);
-  }, [post.comments?.items, post.comments]);
-
-  useEffect(() => {
-    user && post.likes?.includes(user.username)
+    user && post?.likes?.includes(user?.username!)
       ? setLiked(true)
       : setLiked(false);
-  }, [user, post.likes]);
+  }, [user, post?.likes]);
 
   const fetchUrl = async (key: string) => {
     const url = await Storage.get(key);
@@ -60,8 +55,8 @@ const PostCard: React.FC<Props> = ({ post }) => {
 
   const likePost = async () => {
     const data = {
-      id: post.id,
-      likes: post?.likes ? [...post.likes, user.username] : [user.username],
+      id: post?.id,
+      likes: post?.likes ? [...post.likes, user?.username] : [user?.username],
     };
     try {
       (await API.graphql(
@@ -73,9 +68,9 @@ const PostCard: React.FC<Props> = ({ post }) => {
   };
 
   const unlikePost = async () => {
-    const updatedData = post?.likes?.filter((item) => item !== user.username);
+    const updatedData = post?.likes?.filter((item) => item !== user?.username);
     const unlike = {
-      id: post.id,
+      id: post?.id,
       likes: updatedData,
     };
     try {
@@ -90,8 +85,8 @@ const PostCard: React.FC<Props> = ({ post }) => {
   const addComment = async (comment: string) => {
     const newComment = {
       content: comment,
-      username: user.username,
-      commentPostId: post.id,
+      username: user?.username,
+      commentPostId: post?.id,
     };
     try {
       (await API.graphql(
@@ -104,7 +99,7 @@ const PostCard: React.FC<Props> = ({ post }) => {
   };
 
   const navigateProfile = () => {
-    navigate(`/profile/${post.user?.id}`);
+    navigate(`/profile/${post?.user?.id}`);
   };
 
   return (
@@ -114,12 +109,12 @@ const PostCard: React.FC<Props> = ({ post }) => {
         avatar={
           <Avatar
             aria-label="recipe"
-            src={post.user?.imageUrl!}
-            alt={post.username!}
+            src={post?.user?.imageUrl!}
+            alt={post?.username!}
             className={classes.avatar}
           ></Avatar>
         }
-        title={post.username}
+        title={post?.username}
       />
 
       {url ? (
@@ -141,9 +136,9 @@ const PostCard: React.FC<Props> = ({ post }) => {
             <FavoriteBorderOutlinedIcon />
           </IconButton>
         )}
-        {post.likes && post.likes?.length > 1
-          ? `${post.likes?.length} likes`
-          : `${post.likes?.length} like`}
+        {post?.likes && post?.likes?.length > 1
+          ? `${post?.likes?.length} likes`
+          : `${post?.likes?.length} like`}
 
         <IconButton
           aria-label="share"
@@ -156,11 +151,11 @@ const PostCard: React.FC<Props> = ({ post }) => {
       </CardActions>
       <CardContent>
         <Typography variant="body1" color="textPrimary" component="p">
-          <span className={classes.descriptionUsername}>{post.username}</span>
-          {post.caption}
+          <span className={classes.descriptionUsername}>{post?.username}</span>
+          {post?.caption}
         </Typography>
       </CardContent>
-      {comments && comments?.length > 0 && (
+      {post?.comments?.items && post?.comments?.items?.length > 0 && (
         <CardContent className={classes.allcomments}>
           {commentsOpen ? (
             <Typography
@@ -185,7 +180,7 @@ const PostCard: React.FC<Props> = ({ post }) => {
       )}
       {commentsOpen && (
         <CardContent className={classes.comment}>
-          {comments?.map((item: Comment | null) => {
+          {post?.comments?.items?.map((item: Comment | null) => {
             return (
               <CardContent key={item?.id}>
                 <Typography variant="body1" color="textPrimary" component="p">

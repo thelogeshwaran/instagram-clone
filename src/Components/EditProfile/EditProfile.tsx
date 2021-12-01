@@ -47,7 +47,7 @@ function EditProfile({ setOpen }: IProps) {
 
   const updateProfile = async (url: string) => {
     const data = {
-      id: user.id,
+      id: user?.id,
       imageUrl: url,
       about: about,
     };

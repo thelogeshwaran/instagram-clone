@@ -5,17 +5,17 @@ import { Post } from "../../API";
 import { useDataProvider } from "../../Context/DataContext";
 
 function ImageGrid() {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<(Post | null)[]>([]);
   const { userProfile } = useDataProvider();
 
   useEffect(() => {
-    userProfile?.posts && setPosts(userProfile?.posts.items!);
+    userProfile?.posts?.items && setPosts(userProfile?.posts?.items!);
   }, [userProfile]);
 
   return (
     <div className="imageGrid">
-      {posts.map((item: Post) => {
-        return <ImageItem key={item.id} url={item.imageUrl!} />;
+      {posts.map((item: Post | null) => {
+        return <ImageItem key={item?.id} url={item?.imageUrl!} />;
       })}
     </div>
   );
