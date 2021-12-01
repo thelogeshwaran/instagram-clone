@@ -14,7 +14,6 @@ import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 import { Post, Comment } from "../../API";
 import { Storage } from "aws-amplify";
 import FavoriteBorderOutlinedIcon from "@material-ui/icons/FavoriteBorderOutlined";
-import "./Post.css";
 import { useDataProvider } from "../../Context/DataContext";
 import { API, graphqlOperation } from "aws-amplify";
 import { updatePost } from "../../graphql/mutations";

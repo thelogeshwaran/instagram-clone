@@ -4,8 +4,10 @@ import ProfileHeader from "../../Components/ProfileHeader/ProfileHeader";
 import { useParams } from "react-router";
 import { useStore } from "../../Store/PostStore";
 import { useDataProvider } from "../../Context/DataContext";
+import { makeStyles } from "@material-ui/core/styles";
 
 function ProfilePage() {
+  const classes = useStyles();
   const { id } = useParams();
   const { fetchUserProfile } = useStore();
   const { userProfile } = useDataProvider();
@@ -17,7 +19,7 @@ function ProfilePage() {
   }, [id]);
 
   return (
-    <div>
+    <div className={classes.profilePage}>
       <ProfileHeader />
       <ImageGrid />
     </div>
@@ -25,3 +27,9 @@ function ProfilePage() {
 }
 
 export default ProfilePage;
+
+const useStyles = makeStyles(() => ({
+  profilePage: {
+    minHeight: "90vh",
+  },
+}));
