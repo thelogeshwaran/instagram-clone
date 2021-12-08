@@ -5,7 +5,6 @@ import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import ImageUploader from "../ImageUploader/ImageUploader";
 import AddBoxOutlinedIcon from "@material-ui/icons/AddBoxOutlined";
-import IconButton from "@material-ui/core/IconButton";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import HomeIcon from "@material-ui/icons/Home";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
@@ -13,6 +12,7 @@ import { Link } from "react-router-dom";
 import Auth from "@aws-amplify/auth";
 import { useNavigate } from "react-router-dom";
 import { useDataProvider } from "../../Context/DataContext";
+import { MaterialIconButton } from "../MaterialIconButton/MaterialIconButton";
 
 const Header: React.FC = () => {
   const classes = useStyles();
@@ -48,17 +48,26 @@ const Header: React.FC = () => {
       ></img>
       <div>
         <Link to="/">
-          <IconButton aria-label="settings">
-            <HomeIcon />
-          </IconButton>
+          <MaterialIconButton
+            children={<HomeIcon />}
+            color={undefined}
+            size="medium"
+          />
         </Link>
-        <IconButton aria-label="settings" onClick={handleOpen}>
-          <AddBoxOutlinedIcon />
-        </IconButton>
+
+        <MaterialIconButton
+          children={<AddBoxOutlinedIcon />}
+          color={undefined}
+          size="medium"
+          onClick={handleOpen}
+        />
+
         <Link to={`/profile/${userId}`}>
-          <IconButton aria-label="settings">
-            <AccountCircleIcon />
-          </IconButton>
+          <MaterialIconButton
+            children={<AccountCircleIcon />}
+            color={undefined}
+            size="medium"
+          />
         </Link>
         <Modal
           aria-labelledby="transition-modal-title"
@@ -76,9 +85,13 @@ const Header: React.FC = () => {
             <ImageUploader setOpen={setOpen} />
           </Fade>
         </Modal>
-        <IconButton aria-label="settings" onClick={logout}>
-          <ExitToAppIcon />
-        </IconButton>
+
+        <MaterialIconButton
+          children={<ExitToAppIcon />}
+          color={undefined}
+          size="medium"
+          onClick={logout}
+        />
       </div>
     </div>
   );

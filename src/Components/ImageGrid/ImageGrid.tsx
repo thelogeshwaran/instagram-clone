@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ImageItem from "../ImageItem/ImageItem";
+import PostImage from "../PostImage/PostImage";
 import { Post } from "../../API";
 import { useDataProvider } from "../../Context/DataContext";
 import { makeStyles } from "@material-ui/core/styles";
@@ -16,7 +16,7 @@ function ImageGrid() {
   return (
     <div className={classes.imageGrid}>
       {posts.map((item: Post | null) => {
-        return <ImageItem key={item?.id} url={item?.imageUrl!} />;
+        return <PostImage key={item?.id} keyword={item?.imageUrl!} />;
       })}
     </div>
   );

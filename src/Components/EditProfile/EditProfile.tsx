@@ -14,10 +14,14 @@ import { updateUser } from "../../graphql/mutations";
 import { useDataProvider } from "../../Context/DataContext";
 
 interface IProps {
+  color?: "primary" | "secondary";
+  disabled?: boolean;
+  height?: number;
+  width?: number;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function EditProfile({ setOpen }: IProps) {
+function EditProfile({ color, disabled, height, width, setOpen }: IProps) {
   const classes = useStyles();
   const [file, setFile] = useState<File | null>(null);
   const [about, setAbout] = useState("");
@@ -41,7 +45,6 @@ function EditProfile({ setOpen }: IProps) {
       });
 
       updateProfile(response.key);
-      console.log(response.key);
     }
   };
 
@@ -64,19 +67,24 @@ function EditProfile({ setOpen }: IProps) {
     }
   };
   return (
-    <form className={classes.root} onSubmit={handleSubmit}>
+    <form
+      className={classes.root}
+      onSubmit={handleSubmit}
+      style={{ height: height ? height : 350, width: width ? width : 500 }}
+    >
       <Box className={classes.heading}>
         <Typography variant="h5">Edit Your Profile</Typography>
       </Box>
-      <Box>
+      <Box className={classes.caption_input}>
         <TextField
-          className={classes.caption_input}
+          className={classes.caption_inputField}
           onChange={(e) => setAbout(e.target.value)}
           label="About"
           variant="outlined"
           autoFocus
           value={about}
           required
+          disabled={disabled}
         />
       </Box>
       <Box>
@@ -87,6 +95,7 @@ function EditProfile({ setOpen }: IProps) {
           multiple
           type="file"
           onChange={handleFileChange}
+          disabled={disabled}
         />
         <label htmlFor="contained-button-file">
           <Button
@@ -94,6 +103,8 @@ function EditProfile({ setOpen }: IProps) {
             startIcon={<AddAPhotoIcon />}
             variant="contained"
             component="span"
+            disabled={disabled}
+            color={color ? color : "primary"}
           >
             Profile Picture
           </Button>
@@ -106,7 +117,8 @@ function EditProfile({ setOpen }: IProps) {
           type="submit"
           startIcon={<BackupIcon />}
           variant="contained"
-          color="primary"
+          color={color}
+          disabled={disabled}
         >
           Save
         </Button>
@@ -126,11 +138,9 @@ const useStyles = makeStyles(() => ({
     display: "flex",
     flexDirection: "column",
     border: "1px solid lightgray ",
-    width: 500,
     margin: "0 auto",
     backgroundColor: "white",
     alignItems: "center",
-    height: 350,
   },
   heading: {
     textAlign: "center",
@@ -142,7 +152,10 @@ const useStyles = makeStyles(() => ({
   caption_input: {
     margin: 10,
     marginTop: 40,
-    width: 400,
+    width: "90%",
+  },
+  caption_inputField: {
+    width: "100%",
   },
   image_button: {
     margin: 10,

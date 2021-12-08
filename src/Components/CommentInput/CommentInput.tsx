@@ -5,10 +5,19 @@ import { makeStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
 
 interface Props {
-  submitComment: (arg0: string) => void;
+  submitComment: (comment: string) => void;
+  disabled: boolean;
+  label: string;
+  width: string | number;
 }
 
-const CommentInput: React.FC<Props> = ({ submitComment }) => {
+const CommentInput: React.FC<Props> = ({
+  submitComment,
+  disabled,
+  label,
+
+  width,
+}) => {
   const classes = useStyles();
   const [comment, setComment] = useState<string | null>("");
   const updateComment = async (comment: string) => {
@@ -19,14 +28,17 @@ const CommentInput: React.FC<Props> = ({ submitComment }) => {
     <div className={classes.commentInput}>
       <TextField
         id="standard-basic"
-        label=" Enter a comment"
+        label={label}
         className={classes.commentbox}
         value={comment}
         onChange={(e) => setComment(e.target.value)}
+        disabled={disabled}
+        style={{ width: width }}
       />
       <IconButton
         aria-label="share"
         onClick={() => comment && updateComment(comment)}
+        disabled={disabled}
       >
         <SendIcon />
       </IconButton>
@@ -43,6 +55,5 @@ const useStyles = makeStyles(() => ({
   },
   commentbox: {
     margin: 0,
-    width: "85%",
   },
 }));

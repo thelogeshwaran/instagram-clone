@@ -6,7 +6,6 @@ import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
 import Avatar from "@material-ui/core/Avatar";
-import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import { red } from "@material-ui/core/colors";
 import FavoriteIcon from "@material-ui/icons/Favorite";
@@ -24,6 +23,7 @@ import { createComment } from "../../graphql/mutations";
 import { CreateCommentMutation } from "../../API";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { useNavigate } from "react-router-dom";
+import { MaterialIconButton } from "../MaterialIconButton/MaterialIconButton";
 
 interface Props {
   post: Post | null;
@@ -124,29 +124,32 @@ const PostCard: React.FC<Props> = ({ post }) => {
 
       <CardActions disableSpacing>
         {liked ? (
-          <IconButton
-            aria-label="add to favorites"
+          <MaterialIconButton
+            children={<FavoriteIcon />}
+            color={undefined}
+            size="medium"
             onClick={() => unlikePost()}
-          >
-            <FavoriteIcon />
-          </IconButton>
+          />
         ) : (
-          <IconButton aria-label="add to favorites" onClick={() => likePost()}>
-            <FavoriteBorderOutlinedIcon />
-          </IconButton>
+          <MaterialIconButton
+            children={<FavoriteBorderOutlinedIcon />}
+            color={undefined}
+            size="medium"
+            onClick={() => likePost()}
+          />
         )}
         {post?.likes && post?.likes?.length > 1
           ? `${post?.likes?.length} likes`
           : `${post?.likes?.length} like`}
 
-        <IconButton
-          aria-label="share"
+        <MaterialIconButton
+          children={<ChatBubbleOutlineIcon />}
+          color={undefined}
+          size="medium"
           onClick={() =>
             setCommentsOpen((commentsOpen: boolean) => !commentsOpen)
           }
-        >
-          <ChatBubbleOutlineIcon />
-        </IconButton>
+        />
       </CardActions>
       <CardContent>
         <Typography variant="body1" color="textPrimary" component="p">
@@ -194,7 +197,12 @@ const PostCard: React.FC<Props> = ({ post }) => {
         </CardContent>
       )}
       <CardContent className={classes.comment}>
-        <CommentInput submitComment={addComment} />
+        <CommentInput
+          submitComment={addComment}
+          disabled={false}
+          label="Enter a Comment"
+          width="85%"
+        />
       </CardContent>
     </Card>
   );

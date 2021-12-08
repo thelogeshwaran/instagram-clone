@@ -1,27 +1,62 @@
-import React, { useEffect, useState } from "react";
-import { Storage } from "aws-amplify";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 interface Props {
-  url: string | null;
+  url: string;
+  height?: number;
+  width?: number;
+  size?: "small" | "medium" | "large";
 }
 
-function ImageItem({ url }: Props) {
+function ImageItem({ url, height, width, size }: Props) {
   const classes = useStyles();
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchUrl(url!);
-  }, [url]);
+  let imageSize;
 
-  const fetchUrl = async (key: string) => {
-    const url = await Storage.get(key);
-    setImageUrl(url);
-  };
+  if (size) {
+    switch (size) {
+      case "small":
+        imageSize = {
+          height: 250,
+          width: 250,
+        };
+        break;
+      case "medium":
+        imageSize = {
+          height: 350,
+          width: 350,
+        };
+        break;
+      case "large":
+        imageSize = {
+          height: 450,
+          width: 450,
+        };
+        break;
+      default:
+        imageSize = {
+          height: 250,
+          width: 250,
+        };
+        break;
+    }
+  } else {
+    if (height && width) {
+      imageSize = {
+        height: height,
+        width: width,
+      };
+    } else {
+      imageSize = {
+        height: 250,
+        width: 250,
+      };
+    }
+  }
 
   return (
-    <div className={classes.imageItem}>
-      <img className={classes.imageItem_item} src={imageUrl!} alt="posts"></img>
+    <div className={classes.imageItem} style={imageSize}>
+      <img className={classes.imageItem_item} src={url!} alt="posts"></img>
     </div>
   );
 }
@@ -30,8 +65,6 @@ export default ImageItem;
 
 const useStyles = makeStyles(() => ({
   imageItem: {
-    height: 250,
-    width: 250,
     margin: 10,
   },
   imageItem_item: {
