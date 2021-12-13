@@ -1,15 +1,15 @@
 import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 
-import EditProfile from "./EditProfile";
+import EditProfileCard from "./EditProfileCard";
 
 export default {
-  title: "Example/EditProfile",
-  component: EditProfile,
-} as ComponentMeta<typeof EditProfile>;
+  title: "Example/EditProfileCard",
+  component: EditProfileCard,
+} as ComponentMeta<typeof EditProfileCard>;
 
-const Template: ComponentStory<typeof EditProfile> = (args) => (
-  <EditProfile {...args} />
+const Template: ComponentStory<typeof EditProfileCard> = (args) => (
+  <EditProfileCard {...args} />
 );
 
 export const Primary = Template.bind({});

@@ -15,7 +15,6 @@ const CommentInput: React.FC<Props> = ({
   submitComment,
   disabled,
   label,
-
   width,
 }) => {
   const classes = useStyles();
