@@ -34,9 +34,9 @@ function ProfileHeader() {
       setOpen={setOpen}
       url={url}
       ownProfile={ownProfile}
-      username={user?.username!}
-      about={user?.about!}
-      postLength={user?.posts?.items?.length!}
+      username={userProfile?.username!}
+      about={userProfile?.about!}
+      postLength={userProfile?.posts?.items?.length!}
     />
   );
 }

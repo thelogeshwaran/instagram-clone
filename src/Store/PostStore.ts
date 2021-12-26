@@ -28,7 +28,7 @@ export const useStore = create<PostState>((set, get) => ({
   userProfile: null,
   addPost: (data: Post) => {
     set((state) => ({
-      posts: [...state.posts, data],
+      posts: [ data,...state.posts],
     }));
   },
   fetchUser: async () => {

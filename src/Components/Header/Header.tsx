@@ -43,7 +43,7 @@ const Header: React.FC = () => {
     <div className={classes.app_header}>
       <img
         className={classes.app_headerImage}
-        src="https://pngimage.net/wp-content/uploads/2018/06/font-instagram-png-2.png"
+        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAOWhcHr2S7sn2x5cckQXRBWYkVm2UWaqmFOJkjpfOVsqmXXjGfMYYJnb8Wea0XlcY1w&usqp=CAU"
         alt="Instagram"
       ></img>
       <div>
